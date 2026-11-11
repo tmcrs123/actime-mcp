@@ -1,0 +1,10 @@
+{
+  // VS Code / GitHub Copilot MCP config for this workspace.
+  // Credentials come from `dotnet user-secrets` (see README) so nothing sensitive lives here.
+  "servers": {
+    "actitime": {
+      "type": "stdio",
+      "command": "${workspaceFolder}/publish/ActiTimeMcp.exe"
+    }
+  }
+}
