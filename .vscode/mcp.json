@@ -4,7 +4,7 @@
   "servers": {
     "actitime": {
       "type": "stdio",
-      "command": "${workspaceFolder}/publish/ActiTimeMcp.exe"
+      "command": "${workspaceFolder}\\publish\\ActiTimeMcp.exe"
     }
   }
 }
