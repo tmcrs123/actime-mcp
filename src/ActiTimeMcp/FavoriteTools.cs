@@ -11,7 +11,8 @@ public sealed class FavoriteTools(FavoritesStore store, ActiTimeClient api)
     [Description("""
         Lists the user's favourite tasks: the predefined actiTIME tasks they log time against most often, each with an optional
         alias, keywords and default comment. ALWAYS check this list first when mapping what the user worked on to a task;
-        only fall back to search_tasks when no favourite clearly fits. Live task status is included, so completed tasks are flagged.
+        only fall back to search_tasks when no favourite clearly fits. When asking the user what they worked on, show them their open
+        favourites as a short numbered list so they don't have to remember them. Live task status is included, so completed tasks are flagged.
         """)]
     public async Task<object> ListFavoriteTasks(CancellationToken ct)
     {
