@@ -43,7 +43,14 @@ public sealed class ActiTimeClient(HttpClient http)
     public Task<ActiTask> GetTaskAsync(long taskId, CancellationToken ct = default)
         => GetAsync<ActiTask>($"tasks/{taskId}", ct);
 
-
+    /// <summary>Fetches several tasks by id in one call (any status).</summary>
+    public async Task<List<ActiTask>> GetTasksByIdsAsync(IEnumerable<long> ids, CancellationToken ct = default)
+    {
+        var list = ids.Distinct().ToList();
+        if (list.Count == 0) return [];
+        var q = new QueryBuilder().Add("ids", string.Join(",", list)).Add("limit", list.Count);
+        return (await GetAsync<PagedResult<ActiTask>>("tasks" + q, ct)).Items;
+    }
 
     public Task<TimeTrackResponse> GetTimeTrackAsync(
         long userId, DateOnly from, DateOnly to, long? taskId = null, CancellationToken ct = default)

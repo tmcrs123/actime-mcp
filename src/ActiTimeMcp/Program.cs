@@ -41,6 +41,8 @@ builder.Services.AddHttpClient<ActiTimeClient>((sp, http) =>
     http.Timeout = TimeSpan.FromSeconds(30);
 });
 
+builder.Services.AddSingleton<FavoritesStore>();
+
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()

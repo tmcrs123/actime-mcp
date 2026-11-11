@@ -15,7 +15,9 @@ Tasks are predefined in actiTIME: the server has **no way to create tasks** and 
 |---|---|
 | `whoami` | Confirms credentials, returns your user and today's date |
 | `list_customers` / `list_projects` | Browse customers and projects (name filter) |
-| `search_tasks` | Find open tasks by words / project / customer |
+| `list_favorite_tasks` | Your usual tasks (checked first, before any search), with live status |
+| `add_favorite_task` / `remove_favorite_task` | Manage favourites conversationally |
+| `search_tasks` | Find open tasks by words / project / customer (fallback when no favourite fits) |
 | `log_time` | Log one or many entries (`set` = overwrite cell, `add` = add to it). Durations like `1h30`, `1.5h`, `45m`, `1:30`; dates like `today`, `yesterday`, `monday`, `2026-11-11` |
 | `get_timesheet` | What you've already logged for a day or range, with task/project names |
 | `parse_duration` | Helper to sanity-check durations |
@@ -65,6 +67,28 @@ copilot
 ```
 
 Then `/mcp add`, name `actitime`, type `stdio`, command = full path to `publish\ActiTimeMcp.exe`.
+
+## Favourite tasks
+
+Most days you log to the same handful of tasks. Mark them as favourites and the check-in matches against them
+first, only searching all of actiTIME when nothing fits.
+
+Manage them by just asking Copilot, e.g.:
+
+> "Add the Calls task to my favourites as 'meetings', keywords standup, sync, default comment 'Team calls'."
+> "Show my favourite tasks." / "Remove Supplier selection from favourites."
+
+They're stored locally (never in actiTIME) in `%APPDATA%ctitime-mcpavorites.json`, which you can also edit by hand:
+
+```json
+[
+  { "taskId": 135, "alias": "meetings", "keywords": ["standup", "sync"], "defaultComment": "Team calls" },
+  { "taskId": 116, "alias": "suppliers" }
+]
+```
+
+Only `taskId` is required; the server fills in task/project/customer names. Override the location with
+`ActiTime:FavoritesFile` (or env var `ACTITIME__FAVORITESFILE`).
 
 ## The 5 p.m. reminder
 

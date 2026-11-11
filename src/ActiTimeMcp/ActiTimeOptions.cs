@@ -14,6 +14,9 @@ public sealed class ActiTimeOptions
     /// <summary>Optional IANA/Windows time zone used to resolve "today"/"yesterday". Defaults to the machine's local zone.</summary>
     public string? TimeZone { get; set; }
 
+    /// <summary>Optional path of the favourite-tasks file. Defaults to %APPDATA%\actitime-mcp\favorites.json.</summary>
+    public string? FavoritesFile { get; set; }
+
     public void Validate()
     {
         var missing = new List<string>();

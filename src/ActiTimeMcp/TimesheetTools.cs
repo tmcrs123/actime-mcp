@@ -52,7 +52,7 @@ public sealed class TimesheetTools(ActiTimeClient api, IOptions<ActiTimeOptions>
 
     [McpServerTool(Name = "search_tasks", ReadOnly = true, Idempotent = true)]
     [Description("""
-        Searches actiTIME tasks you can see. Use this to map what the user says they worked on ("fixed the login bug for Acme")
+        Searches all actiTIME tasks you can see. Check list_favorite_tasks first; use this only when no favourite fits. Use this to map what the user says they worked on ("fixed the login bug for Acme")
         to a concrete task id before logging time. 'words' matches task, project and customer names.
         Tasks are predefined by the company and cannot be created here. If nothing fits, ask the user which existing task to use;
         never guess.
