@@ -17,6 +17,7 @@ Tasks are predefined in actiTIME: the server has **no way to create tasks** and 
 | `list_customers` / `list_projects` | Browse customers and projects (name filter) |
 | `list_favorite_tasks` | Your usual tasks (checked first, before any search), with live status |
 | `add_favorite_task` / `remove_favorite_task` | Manage favourites conversationally |
+| `get_suggested_tasks` | Favourites plus what you logged on your previous working day, merged into one numbered list (shown as a table by the check-in) |
 | `search_tasks` | Find open tasks by words / project / customer (fallback when no favourite fits) |
 | `log_time` | Log one or many entries (`set` = overwrite cell, `add` = add to it). Durations like `1h30`, `1.5h`, `45m`, `1:30`; dates like `today`, `yesterday`, `monday`, `2026-11-11` |
 | `get_timesheet` | What you've already logged for a day or range, with task/project names |
@@ -78,7 +79,7 @@ Manage them by just asking Copilot, e.g.:
 > "Add the Calls task to my favourites as 'meetings', keywords standup, sync, default comment 'Team calls'."
 > "Show my favourite tasks." / "Remove Supplier selection from favourites."
 
-They're stored locally (never in actiTIME) in `%APPDATA%ctitime-mcpavorites.json`, which you can also edit by hand:
+They're stored locally (never in actiTIME) in `%APPDATA%\actitime-mcp\favorites.json`, which you can also edit by hand:
 
 ```json
 [
@@ -89,6 +90,21 @@ They're stored locally (never in actiTIME) in `%APPDATA%ctitime-mcpavorites.js
 
 Only `taskId` is required; the server fills in task/project/customer names. Override the location with
 `ActiTime:FavoritesFile` (or env var `ACTITIME__FAVORITESFILE`).
+
+## Yesterday's tasks
+
+If you worked on something yesterday you're probably still on it today, so every entry saved through `log_time` is
+remembered locally in `%APPDATA%\actitime-mcp\recent.json` (last 30 days, never sent anywhere). The next check-in shows
+those tasks alongside your favourites in one table:
+
+| # | Task | Project / Customer | ★ | Wed 11/11 |
+|---|------|--------------------|---|-----------|
+| 1 | meetings: Calls | Management / Our company | ★ | 1h – Team calls |
+| 2 | API refactor | Backend / Acme | | 3h – Login endpoint |
+
+"Previous working day" is the most recent earlier day you logged anything for, so on Monday you see Friday's tasks.
+Only time logged through this server is remembered (not entries made in the actiTIME web UI), and completed tasks are
+left out. Override the location with `ActiTime:RecentFile` (or env var `ACTITIME__RECENTFILE`).
 
 ## The 5 p.m. reminder
 

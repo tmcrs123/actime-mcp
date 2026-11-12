@@ -7,7 +7,7 @@ using ModelContextProtocol.Server;
 namespace ActiTimeMcp;
 
 [McpServerToolType]
-public sealed class TimesheetTools(ActiTimeClient api, IOptions<ActiTimeOptions> options)
+public sealed class TimesheetTools(ActiTimeClient api, IOptions<ActiTimeOptions> options, RecentEntriesStore recent)
 {
     private TimeZoneInfo Tz => string.IsNullOrWhiteSpace(options.Value.TimeZone)
         ? TimeZoneInfo.Local
@@ -144,7 +144,20 @@ public sealed class TimesheetTools(ActiTimeClient api, IOptions<ActiTimeOptions>
             }
         }
 
-        return new { saved = results.Count(r => r.Ok), failed = results.Count(r => !r.Ok), results };
+        // Remember what was submitted so tomorrow's check-in can offer the same tasks. Never fail the logging over it.
+        string? warning = null;
+        try
+        {
+            await recent.RecordAsync(
+                results.Where(r => r.Ok).Select(r => new RecentEntry { Date = r.Date!, TaskId = r.TaskId, Minutes = r.Minutes ?? 0, Comment = r.Comment }),
+                Parsing.ParseDate(null, Tz), ct);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or McpException)
+        {
+            warning = "Time was logged, but it could not be remembered for tomorrow's check-in: " + ex.Message;
+        }
+
+        return new { saved = results.Count(r => r.Ok), failed = results.Count(r => !r.Ok), results, warning };
     }
 
     public sealed record LogResult(bool Ok, string? Date, long TaskId, int? Minutes, string? Duration, string? Comment, string? Error);

@@ -17,6 +17,9 @@ public sealed class ActiTimeOptions
     /// <summary>Optional path of the favourite-tasks file. Defaults to %APPDATA%\actitime-mcp\favorites.json.</summary>
     public string? FavoritesFile { get; set; }
 
+    /// <summary>Optional path of the file remembering submitted entries. Defaults to %APPDATA%\actitime-mcp\recent.json.</summary>
+    public string? RecentFile { get; set; }
+
     public void Validate()
     {
         var missing = new List<string>();

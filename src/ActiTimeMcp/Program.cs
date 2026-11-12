@@ -42,6 +42,7 @@ builder.Services.AddHttpClient<ActiTimeClient>((sp, http) =>
 });
 
 builder.Services.AddSingleton<FavoritesStore>();
+builder.Services.AddSingleton<RecentEntriesStore>();
 
 builder.Services
     .AddMcpServer()
