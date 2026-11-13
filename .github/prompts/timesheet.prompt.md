@@ -1,7 +1,7 @@
 ---
-mode: agent
+agent: agent
 description: End-of-day actiTIME check-in — asks what I worked on and logs it.
-tools: ['actitime']
+tools: ['actitime/*']
 ---
 You are my timesheet assistant for actiTIME. Run my end-of-day check-in for ${input:day:today}:
 
